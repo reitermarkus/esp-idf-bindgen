@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `vTaskNotifyGiveFromISR` fn in crate `esp_idf_bindgen`."><meta name="keywords" content="rust, rustlang, rust-lang, vTaskNotifyGiveFromISR"><title>esp_idf_bindgen::vTaskNotifyGiveFromISR - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc fn"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../esp_idf_bindgen/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a><div class="sidebar-elems"><p class='location'><a href='index.html'>esp_idf_bindgen</a></p><script>window.sidebarCurrent = {name: 'vTaskNotifyGiveFromISR', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/esp_idf_bindgen/target/xtensa-esp32-none-elf/debug/build/esp-idf-bindgen-cc385b345f87affc/out/bindings.rs.html#21970-21973' title='goto source code'>[src]</a></span><span class='in-band'>Function <a href='index.html'>esp_idf_bindgen</a>::<wbr><a class="fn" href=''>vTaskNotifyGiveFromISR</a></span></h1><pre class='rust fn'>pub unsafe extern &quot;C&quot; fn vTaskNotifyGiveFromISR(<br>&nbsp;&nbsp;&nbsp;&nbsp;xTaskToNotify: <a class="type" href="../esp_idf_bindgen/type.TaskHandle_t.html" title="type esp_idf_bindgen::TaskHandle_t">TaskHandle_t</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;pxHigherPriorityTaskWoken: *mut <a class="type" href="../esp_idf_bindgen/type.BaseType_t.html" title="type esp_idf_bindgen::BaseType_t">BaseType_t</a><br>)</pre><div class='docblock'><p>Simplified macro for sending task notification from ISR.</p>
+<p>configUSE_TASK_NOTIFICATIONS must be undefined or defined as 1 for this macro
+to be available.</p>
+<p>When configUSE_TASK_NOTIFICATIONS is set to one each task has its own private
+&quot;notification value&quot;, which is a 32-bit unsigned integer (uint32_t).</p>
+<p>A version of xTaskNotifyGive() that can be called from an interrupt service
+routine (ISR).</p>
+<p>Events can be sent to a task using an intermediary object.  Examples of such
+objects are queues, semaphores, mutexes and event groups.  Task notifications
+are a method of sending an event directly to a task without the need for such
+an intermediary object.</p>
+<p>A notification sent to a task can optionally perform an action, such as
+update, overwrite or increment the task's notification value.  In that way
+task notifications can be used to send data to a task, or be used as light
+weight and fast binary or counting semaphores.</p>
+<p>vTaskNotifyGiveFromISR() is intended for use when task notifications are
+used as light weight and faster binary or counting semaphore equivalents.
+Actual FreeRTOS semaphores are given from an ISR using the
+xSemaphoreGiveFromISR() API function, the equivalent action that instead uses
+a task notification is vTaskNotifyGiveFromISR().</p>
+<p>When task notifications are being used as a binary or counting semaphore
+equivalent then the task being notified should wait for the notification
+using the ulTaskNotificationTake() API function rather than the
+xTaskNotifyWait() API function.</p>
+<p>See http://www.FreeRTOS.org/RTOS-task-notifications.html for more details.</p>
+<p>@param xTaskToNotify The handle of the task being notified.  The handle to a
+task can be returned from the xTaskCreate() API function used to create the
+task, and the handle of the currently running task can be obtained by calling
+xTaskGetCurrentTaskHandle().</p>
+<p>@param pxHigherPriorityTaskWoken  vTaskNotifyGiveFromISR() will set
+*pxHigherPriorityTaskWoken to pdTRUE if sending the notification caused the
+task to which the notification was sent to leave the Blocked state, and the
+unblocked task has a priority higher than the currently running task.  If
+vTaskNotifyGiveFromISR() sets this value to pdTRUE then a context switch
+should be requested before the interrupt is exited.  How a context switch is
+requested from an ISR is dependent on the port - see the documentation page
+for the port in use.</p>
+<p>\ingroup TaskNotifications</p>
+</div></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../";window.currentCrate = "esp_idf_bindgen";</script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

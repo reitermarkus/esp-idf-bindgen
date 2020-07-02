@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `xTaskNotifyWait` fn in crate `esp_idf_bindgen`."><meta name="keywords" content="rust, rustlang, rust-lang, xTaskNotifyWait"><title>esp_idf_bindgen::xTaskNotifyWait - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc fn"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../esp_idf_bindgen/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a><div class="sidebar-elems"><p class='location'><a href='index.html'>esp_idf_bindgen</a></p><script>window.sidebarCurrent = {name: 'xTaskNotifyWait', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/esp_idf_bindgen/target/xtensa-esp32-none-elf/debug/build/esp-idf-bindgen-cc385b345f87affc/out/bindings.rs.html#21913-21918' title='goto source code'>[src]</a></span><span class='in-band'>Function <a href='index.html'>esp_idf_bindgen</a>::<wbr><a class="fn" href=''>xTaskNotifyWait</a></span></h1><pre class='rust fn'>pub unsafe extern &quot;C&quot; fn xTaskNotifyWait(<br>&nbsp;&nbsp;&nbsp;&nbsp;ulBitsToClearOnEntry: u32, <br>&nbsp;&nbsp;&nbsp;&nbsp;ulBitsToClearOnExit: u32, <br>&nbsp;&nbsp;&nbsp;&nbsp;pulNotificationValue: *mut u32, <br>&nbsp;&nbsp;&nbsp;&nbsp;xTicksToWait: <a class="type" href="../esp_idf_bindgen/type.TickType_t.html" title="type esp_idf_bindgen::TickType_t">TickType_t</a><br>) -&gt; <a class="type" href="../esp_idf_bindgen/type.BaseType_t.html" title="type esp_idf_bindgen::BaseType_t">BaseType_t</a></pre><div class='docblock'><p>Wait for task notification</p>
+<p>configUSE_TASK_NOTIFICATIONS must be undefined or defined as 1 for this
+function to be available.</p>
+<p>When configUSE_TASK_NOTIFICATIONS is set to one each task has its own private
+&quot;notification value&quot;, which is a 32-bit unsigned integer (uint32_t).</p>
+<p>Events can be sent to a task using an intermediary object.  Examples of such
+objects are queues, semaphores, mutexes and event groups.  Task notifications
+are a method of sending an event directly to a task without the need for such
+an intermediary object.</p>
+<p>A notification sent to a task can optionally perform an action, such as
+update, overwrite or increment the task's notification value.  In that way
+task notifications can be used to send data to a task, or be used as light
+weight and fast binary or counting semaphores.</p>
+<p>A notification sent to a task will remain pending until it is cleared by the
+task calling xTaskNotifyWait() or ulTaskNotifyTake().  If the task was
+already in the Blocked state to wait for a notification when the notification
+arrives then the task will automatically be removed from the Blocked state
+(unblocked) and the notification cleared.</p>
+<p>A task can use xTaskNotifyWait() to [optionally] block to wait for a
+notification to be pending, or ulTaskNotifyTake() to [optionally] block
+to wait for its notification value to have a non-zero value.  The task does
+not consume any CPU time while it is in the Blocked state.</p>
+<p>See http://www.FreeRTOS.org/RTOS-task-notifications.html for details.</p>
+<p>@param ulBitsToClearOnEntry Bits that are set in ulBitsToClearOnEntry value
+will be cleared in the calling task's notification value before the task
+checks to see if any notifications are pending, and optionally blocks if no
+notifications are pending.  Setting ulBitsToClearOnEntry to ULONG_MAX (if
+limits.h is included) or 0xffffffffUL (if limits.h is not included) will have
+the effect of resetting the task's notification value to 0.  Setting
+ulBitsToClearOnEntry to 0 will leave the task's notification value unchanged.</p>
+<p>@param ulBitsToClearOnExit If a notification is pending or received before
+the calling task exits the xTaskNotifyWait() function then the task's
+notification value (see the xTaskNotify() API function) is passed out using
+the pulNotificationValue parameter.  Then any bits that are set in
+ulBitsToClearOnExit will be cleared in the task's notification value (note
+*pulNotificationValue is set before any bits are cleared).  Setting
+ulBitsToClearOnExit to ULONG_MAX (if limits.h is included) or 0xffffffffUL
+(if limits.h is not included) will have the effect of resetting the task's
+notification value to 0 before the function exits.  Setting
+ulBitsToClearOnExit to 0 will leave the task's notification value unchanged
+when the function exits (in which case the value passed out in
+pulNotificationValue will match the task's notification value).</p>
+<p>@param pulNotificationValue Used to pass the task's notification value out
+of the function.  Note the value passed out will not be effected by the
+clearing of any bits caused by ulBitsToClearOnExit being non-zero.</p>
+<p>@param xTicksToWait The maximum amount of time that the task should wait in
+the Blocked state for a notification to be received, should a notification
+not already be pending when xTaskNotifyWait() was called.  The task
+will not consume any processing time while it is in the Blocked state.  This
+is specified in kernel ticks, the macro pdMS_TO_TICSK( value_in_ms ) can be
+used to convert a time specified in milliseconds to a time specified in
+ticks.</p>
+<p>@return If a notification was received (including notifications that were
+already pending when xTaskNotifyWait was called) then pdPASS is
+returned.  Otherwise pdFAIL is returned.</p>
+<p>\ingroup TaskNotifications</p>
+</div></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../";window.currentCrate = "esp_idf_bindgen";</script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `vTaskGetRunTimeStats` fn in crate `esp_idf_bindgen`."><meta name="keywords" content="rust, rustlang, rust-lang, vTaskGetRunTimeStats"><title>esp_idf_bindgen::vTaskGetRunTimeStats - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc fn"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../esp_idf_bindgen/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a><div class="sidebar-elems"><p class='location'><a href='index.html'>esp_idf_bindgen</a></p><script>window.sidebarCurrent = {name: 'vTaskGetRunTimeStats', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/esp_idf_bindgen/target/xtensa-esp32-none-elf/debug/build/esp-idf-bindgen-cc385b345f87affc/out/bindings.rs.html#21674' title='goto source code'>[src]</a></span><span class='in-band'>Function <a href='index.html'>esp_idf_bindgen</a>::<wbr><a class="fn" href=''>vTaskGetRunTimeStats</a></span></h1><pre class='rust fn'>pub unsafe extern &quot;C&quot; fn vTaskGetRunTimeStats(pcWriteBuffer: *mut <a class="type" href="../esp_idf_bindgen/libc/type.c_char.html" title="type esp_idf_bindgen::libc::c_char">c_char</a>)</pre><div class='docblock'><p>Get the state of running tasks as a string</p>
+<p>configGENERATE_RUN_TIME_STATS and configUSE_STATS_FORMATTING_FUNCTIONS
+must both be defined as 1 for this function to be available.  The application
+must also then provide definitions for
+portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() and portGET_RUN_TIME_COUNTER_VALUE()
+to configure a peripheral timer/counter and return the timers current count
+value respectively.  The counter should be at least 10 times the frequency of
+the tick count.</p>
+<p>@note This function will disable interrupts for its duration.  It is
+not intended for normal application runtime use but as a debug aid.</p>
+<p>Setting configGENERATE_RUN_TIME_STATS to 1 will result in a total
+accumulated execution time being stored for each task.  The resolution
+of the accumulated time value depends on the frequency of the timer
+configured by the portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() macro.
+Calling vTaskGetRunTimeStats() writes the total execution time of each
+task into a buffer, both as an absolute count value and as a percentage
+of the total system execution time.</p>
+<p>@note This function is provided for convenience only, and is used by many of the
+demo applications.  Do not consider it to be part of the scheduler.</p>
+<p>vTaskGetRunTimeStats() calls uxTaskGetSystemState(), then formats part of the
+uxTaskGetSystemState() output into a human readable table that displays the
+amount of time each task has spent in the Running state in both absolute and
+percentage terms.</p>
+<p>vTaskGetRunTimeStats() has a dependency on the sprintf() C library function
+that might bloat the code size, use a lot of stack, and provide different
+results on different platforms.  An alternative, tiny, third party, and
+limited functionality implementation of sprintf() is provided in many of the
+FreeRTOS/Demo sub-directories in a file called printf-stdarg.c (note
+printf-stdarg.c does not provide a full snprintf() implementation!).</p>
+<p>It is recommended that production systems call uxTaskGetSystemState() directly
+to get access to raw stats data, rather than indirectly through a call to
+vTaskGetRunTimeStats().</p>
+<p>@param pcWriteBuffer A buffer into which the execution times will be
+written, in ASCII form.  This buffer is assumed to be large enough to
+contain the generated report.  Approximately 40 bytes per task should
+be sufficient.</p>
+<p>\ingroup TaskUtils</p>
+</div></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../";window.currentCrate = "esp_idf_bindgen";</script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

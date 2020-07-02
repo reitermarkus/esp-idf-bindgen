@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `esp_sleep_enable_ext1_wakeup` fn in crate `esp_idf_bindgen`."><meta name="keywords" content="rust, rustlang, rust-lang, esp_sleep_enable_ext1_wakeup"><title>esp_idf_bindgen::esp_sleep_enable_ext1_wakeup - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc fn"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../esp_idf_bindgen/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a><div class="sidebar-elems"><p class='location'><a href='index.html'>esp_idf_bindgen</a></p><script>window.sidebarCurrent = {name: 'esp_sleep_enable_ext1_wakeup', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/esp_idf_bindgen/target/xtensa-esp32-none-elf/debug/build/esp-idf-bindgen-cc385b345f87affc/out/bindings.rs.html#47566-47567' title='goto source code'>[src]</a></span><span class='in-band'>Function <a href='index.html'>esp_idf_bindgen</a>::<wbr><a class="fn" href=''>esp_sleep_enable_ext1_wakeup</a></span></h1><pre class='rust fn'>pub unsafe extern &quot;C&quot; fn esp_sleep_enable_ext1_wakeup(<br>&nbsp;&nbsp;&nbsp;&nbsp;mask: u64, <br>&nbsp;&nbsp;&nbsp;&nbsp;mode: <a class="enum" href="../esp_idf_bindgen/enum.esp_sleep_ext1_wakeup_mode_t.html" title="enum esp_idf_bindgen::esp_sleep_ext1_wakeup_mode_t">esp_sleep_ext1_wakeup_mode_t</a><br>) -&gt; <a class="type" href="../esp_idf_bindgen/type.esp_err_t.html" title="type esp_idf_bindgen::esp_err_t">esp_err_t</a></pre><div class='docblock'><p>@brief Enable wakeup using multiple pins</p>
+<p>This function uses external wakeup feature of RTC controller.
+It will work even if RTC peripherals are shut down during sleep.</p>
+<p>This feature can monitor any number of pins which are in RTC IOs.
+Once any of the selected pins goes into the state given by mode argument,
+the chip will be woken up.</p>
+<p>@note This function does not modify pin configuration. The pins are
+configured in esp_sleep_start, immediately before
+entering sleep mode.</p>
+<p>@note internal pullups and pulldowns don't work when RTC peripherals are
+shut down. In this case, external resistors need to be added.
+Alternatively, RTC peripherals (and pullups/pulldowns) may be
+kept enabled using esp_sleep_pd_config function.</p>
+<p>@param mask  bit mask of GPIO numbers which will cause wakeup. Only GPIOs
+which are have RTC functionality can be used in this bit map:
+0,2,4,12-15,25-27,32-39.
+@param mode select logic function used to determine wakeup condition:
+- ESP_EXT1_WAKEUP_ALL_LOW: wake up when all selected GPIOs are low
+- ESP_EXT1_WAKEUP_ANY_HIGH: wake up when any of the selected GPIOs is high
+@return
+- ESP_OK on success
+- ESP_ERR_INVALID_ARG if any of the selected GPIOs is not an RTC GPIO,
+or mode is invalid</p>
+</div></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../";window.currentCrate = "esp_idf_bindgen";</script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

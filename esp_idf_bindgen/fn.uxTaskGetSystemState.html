@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `uxTaskGetSystemState` fn in crate `esp_idf_bindgen`."><meta name="keywords" content="rust, rustlang, rust-lang, uxTaskGetSystemState"><title>esp_idf_bindgen::uxTaskGetSystemState - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc fn"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../esp_idf_bindgen/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a><div class="sidebar-elems"><p class='location'><a href='index.html'>esp_idf_bindgen</a></p><script>window.sidebarCurrent = {name: 'uxTaskGetSystemState', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/esp_idf_bindgen/target/xtensa-esp32-none-elf/debug/build/esp-idf-bindgen-cc385b345f87affc/out/bindings.rs.html#21579-21583' title='goto source code'>[src]</a></span><span class='in-band'>Function <a href='index.html'>esp_idf_bindgen</a>::<wbr><a class="fn" href=''>uxTaskGetSystemState</a></span></h1><pre class='rust fn'>pub unsafe extern &quot;C&quot; fn uxTaskGetSystemState(<br>&nbsp;&nbsp;&nbsp;&nbsp;pxTaskStatusArray: *mut <a class="type" href="../esp_idf_bindgen/type.TaskStatus_t.html" title="type esp_idf_bindgen::TaskStatus_t">TaskStatus_t</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;uxArraySize: <a class="type" href="../esp_idf_bindgen/type.UBaseType_t.html" title="type esp_idf_bindgen::UBaseType_t">UBaseType_t</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;pulTotalRunTime: *mut u32<br>) -&gt; <a class="type" href="../esp_idf_bindgen/type.UBaseType_t.html" title="type esp_idf_bindgen::UBaseType_t">UBaseType_t</a></pre><div class='docblock'><p>Get the state of tasks in the system.</p>
+<p>configUSE_TRACE_FACILITY must be defined as 1 in FreeRTOSConfig.h for
+uxTaskGetSystemState() to be available.</p>
+<p>uxTaskGetSystemState() populates an TaskStatus_t structure for each task in
+the system.  TaskStatus_t structures contain, among other things, members
+for the task handle, task name, task priority, task state, and total amount
+of run time consumed by the task.  See the TaskStatus_t structure
+definition in this file for the full member list.</p>
+<p>@note  This function is intended for debugging use only as its use results in
+the scheduler remaining suspended for an extended period.</p>
+<p>@param pxTaskStatusArray A pointer to an array of TaskStatus_t structures.
+The array must contain at least one TaskStatus_t structure for each task
+that is under the control of the RTOS.  The number of tasks under the control
+of the RTOS can be determined using the uxTaskGetNumberOfTasks() API function.</p>
+<p>@param uxArraySize The size of the array pointed to by the pxTaskStatusArray
+parameter.  The size is specified as the number of indexes in the array, or
+the number of TaskStatus_t structures contained in the array, not by the
+number of bytes in the array.</p>
+<p>@param pulTotalRunTime If configGENERATE_RUN_TIME_STATS is set to 1 in
+FreeRTOSConfig.h then *pulTotalRunTime is set by uxTaskGetSystemState() to the
+total run time (as defined by the run time stats clock, see
+http://www.freertos.org/rtos-run-time-stats.html) since the target booted.
+pulTotalRunTime can be set to NULL to omit the total run time information.</p>
+<p>@return The number of TaskStatus_t structures that were populated by
+uxTaskGetSystemState().  This should equal the number returned by the
+uxTaskGetNumberOfTasks() API function, but will be zero if the value passed
+in the uxArraySize parameter was too small.</p>
+<p>Example usage:
+@code{c}
+// This example demonstrates how a human readable table of run time stats
+// information is generated from raw data provided by uxTaskGetSystemState().
+// The human readable table is written to pcWriteBuffer
+void vTaskGetRunTimeStats( char *pcWriteBuffer )
+{
+TaskStatus_t *pxTaskStatusArray;
+volatile UBaseType_t uxArraySize, x;
+uint32_t ulTotalRunTime, ulStatsAsPercentage;</p>
+<p>// Make sure the write buffer does not contain a string.
+*pcWriteBuffer = 0x00;</p>
+<p>// Take a snapshot of the number of tasks in case it changes while this
+// function is executing.
+uxArraySize = uxTaskGetNumberOfTasks();</p>
+<p>// Allocate a TaskStatus_t structure for each task.  An array could be
+// allocated statically at compile time.
+pxTaskStatusArray = pvPortMalloc( uxArraySize * sizeof( TaskStatus_t ) );</p>
+<p>if( pxTaskStatusArray != NULL )
+{
+// Generate raw status information about each task.
+uxArraySize = uxTaskGetSystemState( pxTaskStatusArray, uxArraySize, &amp;ulTotalRunTime );</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+ <span class="comment">// For percentage calculations.</span>
+ <span class="ident">ulTotalRunTime</span> <span class="op">/</span><span class="op">=</span> <span class="number">100UL</span>;
+
+ <span class="comment">// Avoid divide by zero errors.</span>
+ <span class="kw">if</span>( <span class="ident">ulTotalRunTime</span> <span class="op">&gt;</span> <span class="number">0</span> )
+ {
+     <span class="comment">// For each populated position in the pxTaskStatusArray array,</span>
+     <span class="comment">// format the raw data as human readable ASCII data</span>
+     <span class="kw">for</span>( <span class="ident">x</span> <span class="op">=</span> <span class="number">0</span>; <span class="ident">x</span> <span class="op">&lt;</span> <span class="ident">uxArraySize</span>; <span class="ident">x</span><span class="op">+</span><span class="op">+</span> )
+     {
+         <span class="comment">// What percentage of the total run time has the task used?</span>
+         <span class="comment">// This will always be rounded down to the nearest integer.</span>
+         <span class="comment">// ulTotalRunTimeDiv100 has already been divided by 100.</span>
+         <span class="ident">ulStatsAsPercentage</span> <span class="op">=</span> <span class="ident">pxTaskStatusArray</span>[ <span class="ident">x</span> ].<span class="ident">ulRunTimeCounter</span> <span class="op">/</span> <span class="ident">ulTotalRunTime</span>;
+
+         <span class="kw">if</span>( <span class="ident">ulStatsAsPercentage</span> <span class="op">&gt;</span> <span class="number">0UL</span> )
+         {
+             <span class="ident">sprintf</span>( <span class="ident">pcWriteBuffer</span>, <span class="string">&quot;%s\t\t%lu\t\t%lu%%\r\n&quot;</span>, <span class="ident">pxTaskStatusArray</span>[ <span class="ident">x</span> ].<span class="ident">pcTaskName</span>, <span class="ident">pxTaskStatusArray</span>[ <span class="ident">x</span> ].<span class="ident">ulRunTimeCounter</span>, <span class="ident">ulStatsAsPercentage</span> );
+         }
+         <span class="kw">else</span>
+         {
+             <span class="comment">// If the percentage is zero here then the task has</span>
+             <span class="comment">// consumed less than 1% of the total run time.</span>
+             <span class="ident">sprintf</span>( <span class="ident">pcWriteBuffer</span>, <span class="string">&quot;%s\t\t%lu\t\t&lt;1%%\r\n&quot;</span>, <span class="ident">pxTaskStatusArray</span>[ <span class="ident">x</span> ].<span class="ident">pcTaskName</span>, <span class="ident">pxTaskStatusArray</span>[ <span class="ident">x</span> ].<span class="ident">ulRunTimeCounter</span> );
+         }
+
+         <span class="ident">pcWriteBuffer</span> <span class="op">+</span><span class="op">=</span> <span class="ident">strlen</span>( ( <span class="ident">char</span> <span class="op">*</span> ) <span class="ident">pcWriteBuffer</span> );
+     }
+ }
+
+ <span class="comment">// The array is no longer needed, free the memory it consumes.</span>
+ <span class="ident">vPortFree</span>( <span class="ident">pxTaskStatusArray</span> );</pre></div>
+<p>}
+}
+@endcode</p>
+</div></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../";window.currentCrate = "esp_idf_bindgen";</script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

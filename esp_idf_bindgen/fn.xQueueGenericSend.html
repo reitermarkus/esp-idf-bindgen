@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `xQueueGenericSend` fn in crate `esp_idf_bindgen`."><meta name="keywords" content="rust, rustlang, rust-lang, xQueueGenericSend"><title>esp_idf_bindgen::xQueueGenericSend - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc fn"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../esp_idf_bindgen/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a><div class="sidebar-elems"><p class='location'><a href='index.html'>esp_idf_bindgen</a></p><script>window.sidebarCurrent = {name: 'xQueueGenericSend', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/esp_idf_bindgen/target/xtensa-esp32-none-elf/debug/build/esp-idf-bindgen-cc385b345f87affc/out/bindings.rs.html#19970-19975' title='goto source code'>[src]</a></span><span class='in-band'>Function <a href='index.html'>esp_idf_bindgen</a>::<wbr><a class="fn" href=''>xQueueGenericSend</a></span></h1><pre class='rust fn'>pub unsafe extern &quot;C&quot; fn xQueueGenericSend(<br>&nbsp;&nbsp;&nbsp;&nbsp;xQueue: <a class="type" href="../esp_idf_bindgen/type.QueueHandle_t.html" title="type esp_idf_bindgen::QueueHandle_t">QueueHandle_t</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;pvItemToQueue: *const <a class="enum" href="../esp_idf_bindgen/libc/enum.c_void.html" title="enum esp_idf_bindgen::libc::c_void">c_void</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;xTicksToWait: <a class="type" href="../esp_idf_bindgen/type.TickType_t.html" title="type esp_idf_bindgen::TickType_t">TickType_t</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;xCopyPosition: <a class="type" href="../esp_idf_bindgen/type.BaseType_t.html" title="type esp_idf_bindgen::BaseType_t">BaseType_t</a><br>) -&gt; <a class="type" href="../esp_idf_bindgen/type.BaseType_t.html" title="type esp_idf_bindgen::BaseType_t">BaseType_t</a></pre><div class='docblock'><p>It is preferred that the macros xQueueSend(), xQueueSendToFront() and
+xQueueSendToBack() are used in place of calling this function directly.</p>
+<p>Post an item on a queue.  The item is queued by copy, not by reference.
+This function must not be called from an interrupt service routine.
+See xQueueSendFromISR () for an alternative which may be used in an ISR.</p>
+<p>@param xQueue The handle to the queue on which the item is to be posted.</p>
+<p>@param pvItemToQueue A pointer to the item that is to be placed on the
+queue.  The size of the items the queue will hold was defined when the
+queue was created, so this many bytes will be copied from pvItemToQueue
+into the queue storage area.</p>
+<p>@param xTicksToWait The maximum amount of time the task should block
+waiting for space to become available on the queue, should it already
+be full.  The call will return immediately if this is set to 0 and the
+queue is full.  The time is defined in tick periods so the constant
+portTICK_PERIOD_MS should be used to convert to real time if this is required.</p>
+<p>@param xCopyPosition Can take the value queueSEND_TO_BACK to place the
+item at the back of the queue, or queueSEND_TO_FRONT to place the item
+at the front of the queue (for high priority messages).</p>
+<p>@return pdTRUE if the item was successfully posted, otherwise errQUEUE_FULL.</p>
+<p>Example usage:
+@code{c}
+struct AMessage
+{
+char ucMessageID;
+char ucData[ 20 ];
+} xMessage;</p>
+<p>uint32_t ulVar = 10UL;</p>
+<p>void vATask( void *pvParameters )
+{
+QueueHandle_t xQueue1, xQueue2;
+struct AMessage *pxMessage;</p>
+<p>// Create a queue capable of containing 10 uint32_t values.
+xQueue1 = xQueueCreate( 10, sizeof( uint32_t ) );</p>
+<p>// Create a queue capable of containing 10 pointers to AMessage structures.
+// These should be passed by pointer as they contain a lot of data.
+xQueue2 = xQueueCreate( 10, sizeof( struct AMessage * ) );</p>
+<p>// ...</p>
+<p>if( xQueue1 != 0 )
+{
+// Send an uint32_t.  Wait for 10 ticks for space to become
+// available if necessary.
+if( xQueueGenericSend( xQueue1, ( void * ) &amp;ulVar, ( TickType_t ) 10, queueSEND_TO_BACK ) != pdPASS )
+{
+// Failed to post the message, even after 10 ticks.
+}
+}</p>
+<p>if( xQueue2 != 0 )
+{
+// Send a pointer to a struct AMessage object.  Don't block if the
+// queue is already full.
+pxMessage = &amp; xMessage;
+xQueueGenericSend( xQueue2, ( void * ) &amp;pxMessage, ( TickType_t ) 0, queueSEND_TO_BACK );
+}</p>
+<p>// ... Rest of task code.
+}
+@endcode
+\ingroup QueueManagement</p>
+</div></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../";window.currentCrate = "esp_idf_bindgen";</script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>
