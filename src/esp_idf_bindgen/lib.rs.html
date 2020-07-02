@@ -101,7 +101,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_device</span> <span class="op">=</span> <span class="string">&quot;esp8266&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">esp8266</span>::<span class="kw-2">*</span>;
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;defaults&quot;</span>, <span class="ident">target_device</span> <span class="op">=</span> <span class="string">&quot;esp8266&quot;</span>))]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_device</span> <span class="op">=</span> <span class="string">&quot;esp8266&quot;</span>)]</span>
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">wifi_init_config_t</span> {
   <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
     <span class="self">Self</span> {
@@ -126,7 +126,7 @@
   }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;defaults&quot;</span>, <span class="ident">target_device</span> <span class="op">=</span> <span class="string">&quot;esp32&quot;</span>))]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_device</span> <span class="op">=</span> <span class="string">&quot;esp32&quot;</span>)]</span>
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">wifi_init_config_t</span> {
   <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
     <span class="self">Self</span> {
