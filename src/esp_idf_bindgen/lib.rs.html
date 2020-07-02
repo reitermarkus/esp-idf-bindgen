@@ -75,12 +75,14 @@
 <span id="75">75</span>
 <span id="76">76</span>
 <span id="77">77</span>
+<span id="78">78</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">no_std</span>]</span>
 <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">non_upper_case_globals</span>)]</span>
 <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">non_camel_case_types</span>)]</span>
 <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
 
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">target_device</span> <span class="op">=</span> <span class="string">&quot;esp32&quot;</span>, <span class="ident">target_device</span> <span class="op">=</span> <span class="string">&quot;esp8266&quot;</span>))]</span>
 <span class="macro">include</span><span class="macro">!</span>(<span class="macro">concat</span><span class="macro">!</span>(<span class="macro">env</span><span class="macro">!</span>(<span class="string">&quot;OUT_DIR&quot;</span>), <span class="string">&quot;/bindings.rs&quot;</span>));
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_device</span> <span class="op">=</span> <span class="string">&quot;esp8266&quot;</span>)]</span>
